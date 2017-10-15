@@ -1,0 +1,88 @@
+<!doctype html>
+<html ng-app="VideoCrowdControlAdminApp">
+<head>
+  <!-- Angular Material CSS using GitCDN to load directly from `bower-material/master` -->
+  <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.css">
+
+  <!-- Data Table style sheet -->
+  <link href="static/md-data-table.min.css" rel="stylesheet" type="text/css"/>
+
+  <!-- Angular Material Dependencies -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+  <!-- Angular Material Javascript using GitCDN to load directly from `bower-material/master` -->
+  <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
+
+  <!-- data table module -->
+  <script type="text/javascript" src="static/md-data-table.min.js"></script>
+
+  <title>videos statistics</title>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script> -->
+    <script src="{{ url_for('static', filename='admin.js') }}"></script>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles/style.css') }}">
+
+</head>
+{% raw %}
+<body ng-controller="AdminController" layout-align="center center">
+
+  <md-content class="md-padding" layout-xs="column" layout="row" layout-align="center center">
+    <div flex-xs flex-gt-xs="80" layout="column">
+      <md-card>
+        <md-card-header class="md-primary">
+          <md-card-avatar>
+            <img class="md-user-avatar"  src="static/images/logo.svg"/>
+          </md-card-avatar>
+          <md-card-header-text>
+            <span class="md-title">Video Crowd check</span>
+            <span class="md-subhead">Admin interface.</span>
+          </md-card-header-text>
+        </md-card-header>
+
+        <md-table-container>
+          <table md-table ng-model="selected" md-progress="promise">
+            <thead md-head md-order="query.order">
+              <tr md-row>
+                <th md-column><span>Video</span></th>
+                <th md-column><span>Version</span></th>
+                <th md-column><span class="green">Good</span></th>
+                <th md-column><span class="red">Bad</span></th>
+                <th md-column><span class="red">Bug</span></th>
+                <th md-column><span class="green">Certified good</span></th>
+                <th md-column><span class="red">Certified bad</span></th>
+                <th md-column><span class="red">Certified bug</span></th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row ng-repeat="stat in data">
+                <td md-cell>{{stat.name}}</td>
+                <td md-cell>{{stat.version}}</td>
+                <td md-cell>{{stat.feedback.good}}</td>
+                <td md-cell>{{stat.feedback.bad}}</td>
+                <td md-cell>{{stat.feedback.bug}}</td>
+                <td md-cell>{{stat.feedback.certified_good}}</td>
+                <td md-cell>{{stat.feedback.certified_bad}}</td>
+                <td md-cell>{{stat.feedback.certified_bug}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{desserts.count}}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>
+      </md-card>
+  </md-content>
+
+
+    <md-card ng-if="selection.attributes.length > 0">
+      <!-- Data table -->
+          </md-card>
+
+    <md-card ng-if="selection.attributes.length > 0">
+      <canvas class="chart chart-bar" chart-data="data.chartData" chart-labels="data.chartLabels" chart-dataset-override="data.datasetOverride"></canvas>
+    </md-card>
+
+  </md-content>
+</body>
+{% endraw %}
+</html>
