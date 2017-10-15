@@ -8,7 +8,7 @@ log = logging.getLogger("video_crowd_control")
 
 class VideoHandler(object):
 
-    video_folder = '/app/static/videos'
+    video_folder = '/app/static/videos/'
 
     def __init__(self):
         self.fileregex = r".*\.mp4"
@@ -23,6 +23,11 @@ class VideoHandler(object):
                 if re.match(self.fileregex, filename):
                     result.append(os.path.join(dirname, filename))
         return result
+
+    def get_video(self, query):
+        videofile = query
+        statbuf = os.stat(os.path.join(self.video_folder, videofile))
+        return {'filename': videofile, 'version': statbuf.st_mtime}
 
     def get_best_video(self):
         """

@@ -7,13 +7,24 @@
     $mdThemingProvider.theme('default')
       .dark();
   })
-  .controller('VideoController', ['$scope', '$log', '$http', '$mdToast',
-    function($scope, $log, $http, $mdToast) {
+  .controller('VideoController', ['$scope', '$log', '$http', '$mdToast', '$location',
+    function($scope, $log, $http, $mdToast, $location) {
       $log.log("Controller initialiation");
       $scope.video = null;
       $scope.videoFilename = null;
 
-      $http.get('/video', {params: {"ip": "unknown"}}).
+      var params = $location.search();
+      $log.log(params.name);
+
+      if (params.name !== undefined) {
+        $scope.file_query = btoa(params.name);
+      }
+
+      if (params.user == "admin") {
+        $scope.certified = true;
+      }
+
+      $http.get('/video', {params: {"ip": "unknown", "filequery": $scope.file_query}}).
         success(function(result) {
           $log.log("Video fetched: " + result.filename);
           $scope.video = result.filename;
@@ -25,7 +36,7 @@
         });
 
         $scope.videoFeedback = function(feedback) {
-          $http.post('/video/rate', {name: $scope.video, version: $scope.version, feedback: $scope.feedback, rating:feedback}).
+          $http.post('/video/rate', {name: $scope.video, version: $scope.version, feedback: $scope.feedback, rating:feedback, certified:$scope.certified}).
             success(function(results) {
               $log.log("feedback Submited: "+ feedback);
               $scope.showSuccessToast()

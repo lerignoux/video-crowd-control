@@ -39,6 +39,11 @@
 
       </md-card-header>
       <img ng-src="static/images/card_background.png" class="md-card-image" alt="Washed Out">
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-subhead">{{video}}</span>
+        </md-card-title-text>
+      </md-card-title>
       <md-card-content class="video-container">
         <video width="640" controls autoplay ng-if="video">
          <source ng-src="{{videoFilename}}" type="video/mp4">

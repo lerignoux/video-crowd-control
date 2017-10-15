@@ -43,7 +43,7 @@
 
         <md-table-container>
           <table md-table ng-model="selected" md-progress="promise">
-            <thead md-head md-order="query.order">
+            <thead md-head md-order="statsOrder">
               <tr md-row>
                 <th md-column><span>Video</span></th>
                 <th md-column><span>Version</span></th>
@@ -56,8 +56,8 @@
               </tr>
             </thead>
             <tbody md-body>
-              <tr md-row ng-repeat="stat in data">
-                <td md-cell>{{stat.name}}</td>
+              <tr md-row ng-repeat="stat in data | orderBy: statsOrder">
+                <td md-cell><a ng-href="{{getVideoLink(stat.name)}}">{{stat.name}}</a></td>
                 <td md-cell>{{stat.version}}</td>
                 <td md-cell>{{stat.feedback.good}}</td>
                 <td md-cell>{{stat.feedback.bad}}</td>

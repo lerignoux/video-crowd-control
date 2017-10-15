@@ -7,8 +7,8 @@
     $mdThemingProvider.theme('default')
       .dark();
   })
-  .controller('AdminController', ['$scope', '$log', '$http', '$filter',
-    function($scope, $log, $http, $filter) {
+  .controller('AdminController', ['$scope', '$log', '$http', '$filter', '$location',
+    function($scope, $log, $http, $filter, $location) {
       $log.log("Controller initialiation");
       $scope.data = [];
 
@@ -20,6 +20,12 @@
       error(function(error) {
         $log.log(error);
       });
+
+      $scope.getVideoLink = function(name) {
+        return "http://" + $location.host() + ":" + $location.port() + "/#?name=" + encodeURI(name);
+      };
+
+
 
     }
   ]);

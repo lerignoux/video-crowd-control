@@ -1,5 +1,6 @@
 
 import argparse
+import base64
 import json
 import logging
 # from http://flask.pocoo.org/ tutorial
@@ -43,6 +44,10 @@ def index():
 
 @app.route('/video', methods=['GET'])
 def video():
+    video_query = request.args.get('filequery')
+    if video_query is not None:
+        return json.dumps(VideoHandler().get_video(base64.b64decode(video_query)))
+
     return json.dumps(VideoHandler().get_best_video())
 
 
@@ -60,11 +65,8 @@ def rate():
         return json.dumps({"code": 404, "err": e})
     feedback = data.get('feedback')
     certified = data.get('certified', False)
-    success = MongoHandler().add_feedback(name, version, rating, feedback=feedback, certified=certified)
-    if success:
-        return json.dumps({"code": 200})
-    else:
-        return json.dumps({"code": 500})
+    MongoHandler().add_feedback(name, version, rating, feedback=feedback, certified=certified)
+    return json.dumps({"code": 200})
 
 
 @app.route('/video/stats', methods=['GET'])
