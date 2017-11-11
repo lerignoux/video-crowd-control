@@ -57,8 +57,10 @@
             </thead>
             <tbody md-body>
               <tr md-row ng-repeat="stat in data | orderBy: statsOrder">
-                <td md-cell><a ng-href="{{getVideoLink(stat.name)}}">{{stat.name}}</a></td>
-                <td md-cell>{{stat.version}}</td>
+                <td md-cell>
+                  <a ng-href="{{getVideoLink(stat.name)}}"><md-tooltip md-direction="bottom">{{stat.feedback.comments.join(separator)}}</md-tooltip>{{stat.name}}</a>
+                </td>
+                <td md-cell>{{stat.date | date:'dd/MM/yyyy'}}</td>
                 <td md-cell>{{stat.feedback.good}}</td>
                 <td md-cell>{{stat.feedback.bad}}</td>
                 <td md-cell>{{stat.feedback.bug}}</td>

@@ -3,6 +3,8 @@ import os
 import random
 import re
 
+from mongo_handler import MongoHandler
+
 log = logging.getLogger("video_crowd_control")
 
 
@@ -33,6 +35,15 @@ class VideoHandler(object):
         """
         Return a random video among the best videos to rate
         """
-        bestfile = random.choice(self.list_videos())
-        statbuf = os.stat(bestfile)
-        return {'filename': bestfile[len(self.video_folder):], 'version': statbuf.st_mtime}
+        videos = self.get_unrated_videos() or self.list_videos()
+        bestfile = random.choice(videos)
+        version = os.path.getmtime(bestfile)
+        return {'filename': bestfile[len(self.video_folder):], 'version': version}
+
+    def get_unrated_videos(self):
+        unrated = []
+        videos = self.list_videos()
+        for vid in videos:
+            if not MongoHandler().get_statistics(name=vid, version=os.path.getmtime(vid)):
+                unrated.append(vid)
+        return unrated

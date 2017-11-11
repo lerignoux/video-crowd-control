@@ -22,7 +22,9 @@ class MongoHandler(object):
             query['name'] = name
         if version is not None:
             query['version'] = version
-        return list(self.collection.find({}, {'_id': 0}))
+        return list(self.collection.find({}, {'_id': 0}).sort(
+            [('feedback.certified_bug', -1), ('feedback.certified_bad', -1), ('feedback.bug', -1), ('feedback.bad', -1)]
+        ))
 
     def insert_new(self, name, version):
         entry = {
@@ -56,5 +58,10 @@ class MongoHandler(object):
         if certified:
             field = "certified_%s" % field
 
-        result = self.collection.update_one({'name': name, 'version': version}, {'$inc': {"feedback.%s" % field: 1}})
+        query = {'$inc': {"feedback.%s" % field: 1}}
+
+        if feedback is not None:
+            query['$push'] = {"feedback.comments": feedback}
+
+        result = self.collection.update_one({'name': name, 'version': version}, query)
         return result == 1

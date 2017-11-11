@@ -12,10 +12,13 @@
       $log.log("Controller initialiation");
       $scope.data = [];
 
+      $scope.separator = ', ';
+
       $http.get('/video/stats', {params: {version: 1}}).
       success(function(results) {
         $log.log("Stats fetched");
         $scope.data = results.data;
+        angular.forEach(results.data, function(entry) {entry.date = new Date(entry.version*1000)})
       }).
       error(function(error) {
         $log.log(error);
