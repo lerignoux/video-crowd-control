@@ -7,8 +7,8 @@
     $mdThemingProvider.theme('default')
       .dark();
   })
-  .controller('VideoController', ['$scope', '$log', '$http', '$mdToast', '$location',
-    function($scope, $log, $http, $mdToast, $location) {
+  .controller('VideoController', ['$scope', '$log', '$http', '$mdToast', '$location', '$window',
+    function($scope, $log, $http, $mdToast, $location, $window) {
       $log.log("Controller initialiation");
       $scope.video = null;
       $scope.videoFilename = null;
@@ -22,6 +22,10 @@
 
       if (params.user == "admin") {
         $scope.certified = true;
+      }
+
+      if (params.refresh == "1") {
+        $scope.autorefresh = true;
       }
 
       $http.get('/video', {params: {"ip": "unknown", "filequery": $scope.file_query}}).
@@ -40,6 +44,9 @@
             success(function(results) {
               $log.log("feedback Submited: "+ feedback);
               $scope.showSuccessToast()
+              if ($scope.autorefresh == true) {
+                $window.location.reload();
+              }
             }).
             error(function(error) {
               $log.log(error);
