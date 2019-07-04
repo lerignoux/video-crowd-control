@@ -12,7 +12,7 @@ from video_handler import VideoHandler
 
 log = logging.getLogger("video_crowd_control")
 
-parser = argparse.ArgumentParser(description='Show transversal xml properties.')
+parser = argparse.ArgumentParser(description='Enable users to review some videos.')
 parser.add_argument('--debug', '-d', dest='debug',
                     action='store_true',
                     help='Debug mode')
